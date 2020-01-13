@@ -53,9 +53,9 @@ public class ReversePostalCode {
         // Depends on which zip file is given -
         // Country specific zip files have readme files that we should ignore
         ZipEntry entry;
-        do{
+        do {
             entry = zippedPostalCodes.getNextEntry();
-        }while(entry.getName().equals("readme.txt"));
+        } while (entry.getName().equals("readme.txt"));
 
         createKdTree(zippedPostalCodes);
     }
@@ -78,8 +78,6 @@ public class ReversePostalCode {
             while ((str = in.readLine()) != null) {
                 postalCodesList.add(new PostalCode(str));
             }
-        } catch (IOException ex) {
-            throw ex;
         }
         kdTree = new KDTree<>(postalCodesList);
     }
