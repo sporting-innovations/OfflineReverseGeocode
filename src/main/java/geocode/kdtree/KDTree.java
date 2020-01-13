@@ -44,7 +44,22 @@ public class KDTree<T extends KDNodeComparator<T>> {
     }
 
     public T findNearest( T search ) {
-        return findNearest(root, search, 0).location;
+        return findNearest(search, null);
+    }
+
+    /**
+     * Finds nearest point within a max distance (in km)
+     */
+    public T findNearest(T search, Double maxDistance) {
+        T nearest = findNearest(root, search, 0).location;
+        if (null != maxDistance) {
+            int earthRadiusInKm = 6371;
+            double distanceInKm = Math.sqrt(nearest.squaredDistance(search)) * earthRadiusInKm;
+            if (distanceInKm > maxDistance) {
+                nearest = null;
+            }
+        }
+        return nearest;
     }
         
     // Only ever goes to log2(items.length) depth so lack of tail recursion is a non-issue
