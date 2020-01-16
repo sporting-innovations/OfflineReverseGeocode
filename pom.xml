@@ -10,12 +10,12 @@
         <version>0.3.2</version>
     </parent>
 
-    <groupId>OfflineReverseGeocode</groupId>
+    <groupId>com.fanthreesixty.libraries</groupId>
     <artifactId>OfflineReverseGeocode</artifactId>
     <packaging>jar</packaging>
     <version>1.1.0-SNAPSHOT</version>
-    <name>Offline Reverse Geocoding Java library</name>
-    <url>http://github.com/AReallyGoodName/OfflineReverseGeocode</url>
+    <name>Offline Reverse Geocoding Java library for geo names and postal codes</name>
+    <description>Forked from http://github.com/AReallyGoodName/OfflineReverseGeocode</description>
 
     <licenses>
         <license>
