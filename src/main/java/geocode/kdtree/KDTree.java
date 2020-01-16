@@ -50,11 +50,15 @@ public class KDTree<T extends KDNodeComparator<T>> {
     }
 
     /**
-     * Finds nearest point within a max distance (in km)
+     * Finds the nearest 3D point within an optional maximum distance in kilometers
+     * @param search        The object containing the lat/long values that we're searching for
+     * @param maxDistance   An optional maximum distance in kilometers between the two points
+     * @return  The object that is nearest to our provided search object
      */
     public T findNearest(T search, Double maxDistance) {
         T nearest = findNearest(root, search, 0).location;
         if (null != maxDistance) {
+            // distance = (squared distance between the nearest point and original point) * radius of the earth
             double distanceInKm = Math.sqrt(nearest.squaredDistance(search)) * EARTH_RADIUS_IN_KM;
             if (distanceInKm > maxDistance) {
                 nearest = null;

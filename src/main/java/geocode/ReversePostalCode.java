@@ -82,6 +82,13 @@ public class ReversePostalCode {
         kdTree = new KDTree<>(postalCodesList);
     }
 
+    /**
+     * Finds the nearest postal code given an optional maximum distance in kilometers
+     * @param latitude      the latitude with which to find the nearest postal code
+     * @param longitude     the longitude with which to find the nearest postal code
+     * @param maxDistance   an optional maximum distance in kilometers between the lat/lon and nearest postal code
+     * @return  the nearest {@link PostalCode} object or null if maximum distance was reached
+     */
     public PostalCode nearestPostalCode(double latitude, double longitude, Double maxDistance) {
         return kdTree.findNearest(new PostalCode(latitude, longitude), maxDistance);
     }
