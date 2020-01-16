@@ -28,12 +28,12 @@ package geocode.kdtree;
 
 import java.util.Comparator;
 
-/**
- *
+/*
  * @author Daniel Glasson
  * Make the user return a comparator for each axis
  * Squared distances should be an optimisation
  */
+@SuppressWarnings("checkstyle:abbreviationaswordinname")
 public abstract class KDNodeComparator<T> { 
     // This should return a comparator for whatever axis is passed in
     protected abstract Comparator getComparator(int axis);

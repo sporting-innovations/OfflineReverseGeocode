@@ -34,7 +34,6 @@ import java.util.zip.ZipInputStream;
 
 /**
  * Uses KD-trees to quickly find the nearest point
- *
  * ReversePostalCode reversePostalCode = new ReversePostalCode(new FileInputStream("c:\\AU.txt"), true);
  * System.out.println("Nearest to -23.456, 123.456 is " + reversePostalCode.nearestPostalCode(-23.456, 123.456));
  */
@@ -70,6 +69,7 @@ public class ReversePostalCode {
     public ReversePostalCode(InputStream postalCodes) throws IOException {
         createKdTree(postalCodes);
     }
+
     private void createKdTree(InputStream postalCodes) throws IOException {
         ArrayList<PostalCode> postalCodesList = new ArrayList<>();
         // Read the postal codes file in the directory
@@ -83,7 +83,7 @@ public class ReversePostalCode {
     }
 
     /**
-     * Finds the nearest postal code given an optional maximum distance in kilometers
+     * Finds the nearest postal code given an optional maximum distance in kilometers.
      * @param latitude      the latitude with which to find the nearest postal code
      * @param longitude     the longitude with which to find the nearest postal code
      * @param maxDistance   an optional maximum distance in kilometers between the lat/lon and nearest postal code

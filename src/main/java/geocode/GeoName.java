@@ -26,10 +26,11 @@ THE SOFTWARE.
 
 package geocode;
 
-import geocode.kdtree.KDNodeComparator;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.toRadians;
+
+import geocode.kdtree.KDNodeComparator;
 
 import java.util.Comparator;
 
@@ -37,13 +38,13 @@ import java.util.Comparator;
  * Created by Daniel Glasson on 18/05/2014.
  * This class works with a placenames files from http://download.geonames.org/export/dump/
  */
-
+@SuppressWarnings({"localvariablename","parametername", "PMD.UselessParentheses"})
 public class GeoName extends KDNodeComparator<GeoName> {
     public String name;
     public boolean majorPlace; // Major or minor place
     public double latitude;
     public double longitude;
-    public double point[] = new double[3]; // The 3D coordinates of the point
+    public double[] point = new double[3]; // The 3D coordinates of the point
     public String country;
 
     GeoName(String data) {
@@ -79,7 +80,7 @@ public class GeoName extends KDNodeComparator<GeoName> {
         double x = this.point[0] - other.point[0];
         double y = this.point[1] - other.point[1];
         double z = this.point[2] - other.point[2];
-        return (x*x) + (y*y) + (z*z);
+        return (x * x) + (y * y) + (z * z);
     }
 
     @Override
@@ -93,7 +94,7 @@ public class GeoName extends KDNodeComparator<GeoName> {
         return GeoNameComparator.values()[axis];
     }
 
-    protected static enum GeoNameComparator implements Comparator<GeoName> {
+    protected enum GeoNameComparator implements Comparator<GeoName> {
         x {
             @Override
             public int compare(GeoName a, GeoName b) {

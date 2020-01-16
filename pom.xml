@@ -47,6 +47,11 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <properties>
+        <checkstyle.fail.on.violation>true</checkstyle.fail.on.violation>
+        <pmd.fail.on.violation>true</pmd.fail.on.violation>
+        <spotbugs.fail.on.violation>false</spotbugs.fail.on.violation>
+    </properties>
     <scm>
         <connection>scm:git:git@github.com:sporting-innovations/OfflineReverseGeocode.git</connection>
         <developerConnection>scm:git:git@github.com:sporting-innovations/OfflineReverseGeocode.git</developerConnection>

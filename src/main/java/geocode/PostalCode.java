@@ -33,7 +33,7 @@ import java.util.Comparator;
 /**
  * This class works with a postal code file from http://download.geonames.org/export/zip/
  */
-
+@SuppressWarnings({"localvariablename","parametername","PMD.UselessParentheses"})
 public class PostalCode extends KDNodeComparator<PostalCode> {
     public String countryCode;
     public String postalCode;
@@ -93,7 +93,7 @@ public class PostalCode extends KDNodeComparator<PostalCode> {
         double x = this.point[0] - other.point[0];
         double y = this.point[1] - other.point[1];
         double z = this.point[2] - other.point[2];
-        return (x*x) + (y*y) + (z*z);
+        return (x * x) + (y * y) + (z * z);
     }
 
     @Override

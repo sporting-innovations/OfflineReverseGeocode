@@ -26,16 +26,22 @@ THE SOFTWARE.
 
 package geocode.kdtree;
 
-/**
- *
+/*
  * @author Daniel Glasson
  */
+@SuppressWarnings("checkstyle:abbreviationaswordinname")
 public class KDNode<T extends KDNodeComparator<T>> {
     KDNode<T> left;
     KDNode<T> right;
     T location;
 
-    public KDNode( KDNode<T> left, KDNode<T> right, T location ) {
+    /**
+     * Creates a KDNode.
+     * @param left      KDNode of left point
+     * @param right     KDNode of right point
+     * @param location  location object containing the lat/lon
+     */
+    public KDNode(KDNode<T> left, KDNode<T> right, T location) {
         this.left = left;
         this.right = right;
         this.location = location;
