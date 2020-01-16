@@ -26,8 +26,11 @@ THE SOFTWARE.
 
 package geocode;
 
+import static java.lang.Math.asin;
 import static java.lang.Math.cos;
+import static java.lang.Math.pow;
 import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 import static java.lang.Math.toRadians;
 
 import geocode.kdtree.KDNodeComparator;
@@ -91,13 +94,13 @@ public class GeoName extends KDNodeComparator<GeoName> {
 
     @Override
     protected double haversineDistance(GeoName other, double radius) {
-        double dLat = Math.toRadians(other.latitude - this.latitude);
-        double dLon = Math.toRadians(other.longitude - this.longitude);
-        double lat1 = Math.toRadians(this.latitude);
-        double lat2 = Math.toRadians(other.latitude);
+        double dLat = toRadians(other.latitude - this.latitude);
+        double dLon = toRadians(other.longitude - this.longitude);
+        double lat1 = toRadians(this.latitude);
+        double lat2 = toRadians(other.latitude);
 
-        double a = Math.pow(Math.sin(dLat / 2),2) + Math.pow(Math.sin(dLon / 2),2) * Math.cos(lat1) * Math.cos(lat2);
-        return 2 * Math.asin(Math.sqrt(a)) * radius;
+        double a = pow(sin(dLat / 2),2) + pow(sin(dLon / 2),2) * cos(lat1) * cos(lat2);
+        return 2 * asin(sqrt(a)) * radius;
     }
 
     @Override

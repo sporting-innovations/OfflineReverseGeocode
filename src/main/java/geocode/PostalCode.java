@@ -22,8 +22,11 @@ THE SOFTWARE.
 
 package geocode;
 
+import static java.lang.Math.asin;
 import static java.lang.Math.cos;
+import static java.lang.Math.pow;
 import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 import static java.lang.Math.toRadians;
 
 import geocode.kdtree.KDNodeComparator;
@@ -33,11 +36,11 @@ import java.util.Comparator;
 /**
  * This class works with a postal code file from http://download.geonames.org/export/zip/
  */
-@SuppressWarnings({"localvariablename","parametername","PMD.UselessParentheses"})
+@SuppressWarnings({"localvariablename","parametername","membername","PMD.UselessParentheses"})
 public class PostalCode extends KDNodeComparator<PostalCode> {
-    private final int X = 0;
-    private final int Y = 1;
-    private final int Z = 2;
+    private static final int X = 0;
+    private static final int Y = 1;
+    private static final int Z = 2;
 
     public String countryCode;
     public String postalCode;
@@ -111,13 +114,13 @@ public class PostalCode extends KDNodeComparator<PostalCode> {
 
     @Override
     protected double haversineDistance(PostalCode other, double radius) {
-        double dLat = Math.toRadians(other.latitude - this.latitude);
-        double dLon = Math.toRadians(other.longitude - this.longitude);
-        double lat1 = Math.toRadians(this.latitude);
-        double lat2 = Math.toRadians(other.latitude);
+        double dLat = toRadians(other.latitude - this.latitude);
+        double dLon = toRadians(other.longitude - this.longitude);
+        double lat1 = toRadians(this.latitude);
+        double lat2 = toRadians(other.latitude);
 
-        double a = Math.pow(Math.sin(dLat / 2),2) + Math.pow(Math.sin(dLon / 2),2) * Math.cos(lat1) * Math.cos(lat2);
-        return 2 * Math.asin(Math.sqrt(a)) * radius;
+        double a = pow(sin(dLat / 2),2) + pow(sin(dLon / 2),2) * cos(lat1) * cos(lat2);
+        return 2 * asin(sqrt(a)) * radius;
     }
 
     @Override
