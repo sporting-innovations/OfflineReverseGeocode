@@ -44,4 +44,12 @@ public class ReversePostalCodeTest {
         assertThat(reversePostalCode.nearestPostalCode(78.695697, -41.337372, null).postalCode,
                 is("09704"));
     }
+
+    @Test
+    public void givenFTSLocationWithMaxDistance2_findNearestPostalCode_shouldReturnNearestPostalCode() throws IOException {
+        InputStream fileStream = ClassLoader.getSystemResourceAsStream("US.txt");
+        ReversePostalCode reversePostalCode = new ReversePostalCode(fileStream);
+        assertThat(reversePostalCode.nearestPostalCode(39.0955, -94.5844, 2D).postalCode,
+                is("64121"));
+    }
 }
