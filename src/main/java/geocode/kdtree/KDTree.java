@@ -59,8 +59,7 @@ public class KDTree<T extends KDNodeComparator<T>> {
     public T findNearest(T search, Double maxDistance) {
         T nearest = findNearest(root, search, 0).location;
         if (null != maxDistance) {
-            // distance = (squared distance between the nearest point and original point) * radius of the earth
-            double distanceInKm = Math.sqrt(nearest.squaredDistance(search)) * EARTH_RADIUS_IN_KM;
+            double distanceInKm = nearest.haversineDistance(search, EARTH_RADIUS_IN_KM);
             if (distanceInKm > maxDistance) {
                 nearest = null;
             }

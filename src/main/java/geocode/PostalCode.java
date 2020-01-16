@@ -35,6 +35,10 @@ import java.util.Comparator;
  */
 @SuppressWarnings({"localvariablename","parametername","PMD.UselessParentheses"})
 public class PostalCode extends KDNodeComparator<PostalCode> {
+    private final int X = 0;
+    private final int Y = 1;
+    private final int Z = 2;
+
     public String countryCode;
     public String postalCode;
     public String placeName;
@@ -77,10 +81,13 @@ public class PostalCode extends KDNodeComparator<PostalCode> {
         setPoint();
     }
 
+    /*
+     * Converts lat/lon to a vector (https://www.movable-type.co.uk/scripts/latlong-vectors.html)
+     */
     private void setPoint() {
-        point[0] = cos(toRadians(latitude)) * cos(toRadians(longitude));
-        point[1] = cos(toRadians(latitude)) * sin(toRadians(longitude));
-        point[2] = sin(toRadians(latitude));
+        point[X] = cos(toRadians(latitude)) * cos(toRadians(longitude));
+        point[Y] = cos(toRadians(latitude)) * sin(toRadians(longitude));
+        point[Z] = sin(toRadians(latitude));
     }
 
     @Override
@@ -90,9 +97,9 @@ public class PostalCode extends KDNodeComparator<PostalCode> {
 
     @Override
     protected double squaredDistance(PostalCode other) {
-        double x = this.point[0] - other.point[0];
-        double y = this.point[1] - other.point[1];
-        double z = this.point[2] - other.point[2];
+        double x = this.point[X] - other.point[X];
+        double y = this.point[Y] - other.point[Y];
+        double z = this.point[Z] - other.point[Z];
         return (x * x) + (y * y) + (z * z);
     }
 
@@ -100,6 +107,17 @@ public class PostalCode extends KDNodeComparator<PostalCode> {
     protected double axisSquaredDistance(PostalCode other, int axis) {
         double distance = point[axis] - other.point[axis];
         return distance * distance;
+    }
+
+    @Override
+    protected double haversineDistance(PostalCode other, double radius) {
+        double dLat = Math.toRadians(other.latitude - this.latitude);
+        double dLon = Math.toRadians(other.longitude - this.longitude);
+        double lat1 = Math.toRadians(this.latitude);
+        double lat2 = Math.toRadians(other.latitude);
+
+        double a = Math.pow(Math.sin(dLat / 2),2) + Math.pow(Math.sin(dLon / 2),2) * Math.cos(lat1) * Math.cos(lat2);
+        return 2 * Math.asin(Math.sqrt(a)) * radius;
     }
 
     @Override

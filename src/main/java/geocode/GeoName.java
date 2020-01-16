@@ -90,6 +90,17 @@ public class GeoName extends KDNodeComparator<GeoName> {
     }
 
     @Override
+    protected double haversineDistance(GeoName other, double radius) {
+        double dLat = Math.toRadians(other.latitude - this.latitude);
+        double dLon = Math.toRadians(other.longitude - this.longitude);
+        double lat1 = Math.toRadians(this.latitude);
+        double lat2 = Math.toRadians(other.latitude);
+
+        double a = Math.pow(Math.sin(dLat / 2),2) + Math.pow(Math.sin(dLon / 2),2) * Math.cos(lat1) * Math.cos(lat2);
+        return 2 * Math.asin(Math.sqrt(a)) * radius;
+    }
+
+    @Override
     protected Comparator<GeoName> getComparator(int axis) {
         return GeoNameComparator.values()[axis];
     }

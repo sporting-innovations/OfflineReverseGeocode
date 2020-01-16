@@ -43,4 +43,7 @@ public abstract class KDNodeComparator<T> {
     
     // Return squared distance between one axis only
     protected abstract double axisSquaredDistance(T other, int axis);
+
+    // Return haversine distance between current and other using given radius
+    protected abstract double haversineDistance(T other, double radius);
 }
