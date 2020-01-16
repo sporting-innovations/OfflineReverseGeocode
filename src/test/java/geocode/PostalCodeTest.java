@@ -1,5 +1,6 @@
 package geocode;
 
+import static geocode.kdtree.KDTree.EARTH_RADIUS_IN_KM;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.toRadians;
@@ -56,8 +57,7 @@ public class PostalCodeTest {
         String firstRow = reader.readLine();
         PostalCode akutanAK = new PostalCode(firstRow);
         PostalCode coldBayAK = new PostalCode(55.1858, -162.7211);
-        int earthRadiusInKm = 6371;
-        double distanceInKm = Math.sqrt(akutanAK.squaredDistance(coldBayAK)) * earthRadiusInKm;
+        double distanceInKm = Math.sqrt(akutanAK.squaredDistance(coldBayAK)) * EARTH_RADIUS_IN_KM;
         assertThat(Math.round(distanceInKm), is(Math.round(228.6)));
     }
 

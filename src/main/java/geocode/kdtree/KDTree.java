@@ -37,6 +37,8 @@ import java.util.List;
  * Currently implements createKDTree and findNearest as that's all that's required here
  */
 public class KDTree<T extends KDNodeComparator<T>> {
+    public static int EARTH_RADIUS_IN_KM = 6371;
+
     private KDNode<T> root;
 
     public KDTree( List<T> items ) {
@@ -53,8 +55,7 @@ public class KDTree<T extends KDNodeComparator<T>> {
     public T findNearest(T search, Double maxDistance) {
         T nearest = findNearest(root, search, 0).location;
         if (null != maxDistance) {
-            int earthRadiusInKm = 6371;
-            double distanceInKm = Math.sqrt(nearest.squaredDistance(search)) * earthRadiusInKm;
+            double distanceInKm = Math.sqrt(nearest.squaredDistance(search)) * EARTH_RADIUS_IN_KM;
             if (distanceInKm > maxDistance) {
                 nearest = null;
             }
