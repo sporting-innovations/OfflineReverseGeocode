@@ -2,19 +2,15 @@
 The MIT License (MIT)
 [OSI Approved License]
 The MIT License (MIT)
-
 Copyright (c) 2014 Daniel Glasson
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,39 +33,59 @@ import geocode.kdtree.KDNodeComparator;
 import java.util.Comparator;
 
 /**
- * Created by Daniel Glasson on 18/05/2014.
- * This class works with a placenames files from http://download.geonames.org/export/dump/
+ * This class works with a postal code file from http://download.geonames.org/export/zip/
  */
-@SuppressWarnings({"localvariablename","parametername", "PMD.UselessParentheses"})
-public class GeoName extends KDNodeComparator<GeoName> {
+@SuppressWarnings({"localvariablename","parametername","membername","PMD.UselessParentheses"})
+public class PostalCode extends KDNodeComparator<PostalCode> {
     private static final int X = 0;
     private static final int Y = 1;
     private static final int Z = 2;
 
-    public String name;
-    public boolean majorPlace; // Major or minor place
+    public String countryCode;
+    public String postalCode;
+    public String placeName;
+    public String adminName1;
+    public String adminCode1;
+    public String adminName2;
+    public String adminCode2;
+    public String adminName3;
+    public String adminCode3;
     public double latitude;
     public double longitude;
+    public int accuracy;
     public double[] point = new double[3]; // The 3D coordinates of the point
-    public String country;
 
-    GeoName(String data) {
-        String[] names = data.split("\t");
-        name = names[1];
-        majorPlace = names[6].equals("P");
-        latitude = Double.parseDouble(names[4]);
-        longitude = Double.parseDouble(names[5]);
+    PostalCode(String row) {
+        String[] data = row.split("\t");
+        countryCode = data[0];
+        postalCode = data[1];
+        placeName = data[2];
+        adminName1 = data[3];
+        adminCode1 = data[4];
+        adminName2 = data[5];
+        adminCode2 = data[6];
+        adminName3 = data[7];
+        adminCode3 = data[8];
+        latitude = Double.parseDouble(data[9]);
+        longitude = Double.parseDouble(data[10]);
         setPoint();
-        country = names[8];
+
+        // Accuracy not always provided
+        if (data.length == 12) {
+            accuracy = Integer.parseInt(data[11]);
+        }
     }
 
-    GeoName(Double latitude, Double longitude) {
-        name = country = "Search";
+    PostalCode(Double latitude, Double longitude) {
+        this.placeName = "Search";
         this.latitude = latitude;
         this.longitude = longitude;
         setPoint();
     }
 
+    /*
+     * Converts lat/lon to a vector (https://www.movable-type.co.uk/scripts/latlong-vectors.html)
+     */
     private void setPoint() {
         point[X] = cos(toRadians(latitude)) * cos(toRadians(longitude));
         point[Y] = cos(toRadians(latitude)) * sin(toRadians(longitude));
@@ -78,11 +94,11 @@ public class GeoName extends KDNodeComparator<GeoName> {
 
     @Override
     public String toString() {
-        return name;
+        return placeName;
     }
 
     @Override
-    protected double squaredDistance(GeoName other) {
+    protected double squaredDistance(PostalCode other) {
         double x = this.point[X] - other.point[X];
         double y = this.point[Y] - other.point[Y];
         double z = this.point[Z] - other.point[Z];
@@ -90,7 +106,7 @@ public class GeoName extends KDNodeComparator<GeoName> {
     }
 
     @Override
-    protected double axisSquaredDistance(GeoName other, int axis) {
+    protected double axisSquaredDistance(PostalCode other, int axis) {
         double distance = point[axis] - other.point[axis];
         return distance * distance;
     }
@@ -99,44 +115,44 @@ public class GeoName extends KDNodeComparator<GeoName> {
      * Distance formulas taken from https://www.movable-type.co.uk/scripts/latlong-vectors.html
      */
     @Override
-    protected double distance(GeoName other, double radius) {
+    protected double distance(PostalCode other, double radius) {
         // distance = atan2(cross product, dot product) * radius
         return atan2(cross(other), dot(other)) * radius;
     }
 
     @Override
-    protected Comparator<GeoName> getComparator(int axis) {
+    protected Comparator<PostalCode> getComparator(int axis) {
         return GeoNameComparator.values()[axis];
     }
 
-    protected enum GeoNameComparator implements Comparator<GeoName> {
+    protected enum GeoNameComparator implements Comparator<PostalCode> {
         x {
             @Override
-            public int compare(GeoName a, GeoName b) {
+            public int compare(PostalCode a, PostalCode b) {
                 return Double.compare(a.point[0], b.point[0]);
             }
         },
         y {
             @Override
-            public int compare(GeoName a, GeoName b) {
+            public int compare(PostalCode a, PostalCode b) {
                 return Double.compare(a.point[1], b.point[1]);
             }
         },
         z {
             @Override
-            public int compare(GeoName a, GeoName b) {
+            public int compare(PostalCode a, PostalCode b) {
                 return Double.compare(a.point[2], b.point[2]);
             }
-        };
+        }
     }
 
     /**
      * Multiplies the 3D point by the supplied 3D point using cross (vector) product.
      * Formula taken https://www.movable-type.co.uk/scripts/latlong-vectors.html
-     * @param other - GeoName containing 3D point to be crossed with this GeoName's 3D point.
+     * @param other - Postal Code containing 3D point to be crossed with this postal code's 3D point.
      * @return cross product's length
      */
-    private double cross(GeoName other) {
+    private double cross(PostalCode other) {
         // x = (this.y * other.z) - (this.z * other.y)
         // y = (this.z * other.x) - (this.x * other.z)
         // z = (this.x * other.y) - (this.y * other.x)
@@ -151,10 +167,10 @@ public class GeoName extends KDNodeComparator<GeoName> {
     /**
      * Multiplies the 3D point by the supplied 3D point using dot (scalar) product.
      * Formula taken https://www.movable-type.co.uk/scripts/latlong-vectors.html
-     * @param other - GeoName containing 3D point to be dotted with this GeoName's 3D point.
+     * @param other - Postal Code containing 3D point to be dotted with this postal code's 3D point.
      * @return dot product
      */
-    private double dot(GeoName other) {
+    private double dot(PostalCode other) {
         // dot = (this.x * other.x) + (this.y * other.y) + (this.z * other.z)
         return (this.point[X] * other.point[X]) + (this.point[Y] * other.point[Y]) + (this.point[Z] * other.point[Z]);
     }
