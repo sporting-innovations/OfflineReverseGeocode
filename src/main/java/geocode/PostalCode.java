@@ -22,9 +22,8 @@ THE SOFTWARE.
 
 package geocode;
 
-import static java.lang.Math.asin;
+import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
-import static java.lang.Math.pow;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 import static java.lang.Math.toRadians;
@@ -112,15 +111,13 @@ public class PostalCode extends KDNodeComparator<PostalCode> {
         return distance * distance;
     }
 
+    /*
+     * Distance formulas taken from https://www.movable-type.co.uk/scripts/latlong-vectors.html
+     */
     @Override
-    protected double haversineDistance(PostalCode other, double radius) {
-        double dLat = toRadians(other.latitude - this.latitude);
-        double dLon = toRadians(other.longitude - this.longitude);
-        double lat1 = toRadians(this.latitude);
-        double lat2 = toRadians(other.latitude);
-
-        double a = pow(sin(dLat / 2),2) + pow(sin(dLon / 2),2) * cos(lat1) * cos(lat2);
-        return 2 * asin(sqrt(a)) * radius;
+    protected double distance(PostalCode other, double radius) {
+        // distance = atan2(cross product, dot product) * radius
+        return atan2(cross(other), dot(other)) * radius;
     }
 
     @Override
@@ -147,5 +144,34 @@ public class PostalCode extends KDNodeComparator<PostalCode> {
                 return Double.compare(a.point[2], b.point[2]);
             }
         }
+    }
+
+    /**
+     * Multiplies the 3D point by the supplied 3D point using cross (vector) product.
+     * Formula taken https://www.movable-type.co.uk/scripts/latlong-vectors.html
+     * @param other - Postal Code containing 3D point to be crossed with this postal code's 3D point.
+     * @return cross product's length
+     */
+    private double cross(PostalCode other) {
+        // x = (this.y * other.z) - (this.z * other.y)
+        // y = (this.z * other.x) - (this.x * other.z)
+        // z = (this.x * other.y) - (this.y * other.x)
+        double x = (this.point[Y] * other.point[Z]) - (this.point[Z] * other.point[Y]);
+        double y = (this.point[Z] * other.point[X]) - (this.point[X] * other.point[Z]);
+        double z = (this.point[X] * other.point[Y]) - (this.point[Y] * other.point[X]);
+
+        // length = Math.sqrt((x * x) + (y * y) + (z * z))
+        return sqrt((x * x) + (y * y) + (z * z));
+    }
+
+    /**
+     * Multiplies the 3D point by the supplied 3D point using dot (scalar) product.
+     * Formula taken https://www.movable-type.co.uk/scripts/latlong-vectors.html
+     * @param other - Postal Code containing 3D point to be dotted with this postal code's 3D point.
+     * @return dot product
+     */
+    private double dot(PostalCode other) {
+        // dot = (this.x * other.x) + (this.y * other.y) + (this.z * other.z)
+        return (this.point[X] * other.point[X]) + (this.point[Y] * other.point[Y]) + (this.point[Z] * other.point[Z]);
     }
 }

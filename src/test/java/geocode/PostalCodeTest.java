@@ -61,6 +61,18 @@ public class PostalCodeTest {
         assertThat(Math.round(distanceInKm), is(Math.round(228.6)));
     }
 
+    @Test
+    public void givenPostalCode_distance_returnDistanceBetweenPostalCodes() throws IOException {
+        InputStream fileStream = ClassLoader.getSystemResourceAsStream("US.txt");
+        assert fileStream != null;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(fileStream));
+        String firstRow = reader.readLine();
+        PostalCode akutanAK = new PostalCode(firstRow);
+        PostalCode coldBayAK = new PostalCode(55.1858, -162.7211);
+        double distanceInKm = akutanAK.distance(coldBayAK, EARTH_RADIUS_IN_KM);
+        assertThat(Math.round(distanceInKm), is(Math.round(228.6)));
+    }
+
     private void assertPostalCode(PostalCode postalCode, String countryCode, String postal, String placeName,
                                   String adminName1, String adminCode1, String adminName2, String adminCode2,
                                   String adminName3, String adminCode3, double latitude, double longitude,
