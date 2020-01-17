@@ -55,6 +55,6 @@
     <scm>
         <connection>scm:git:git@github.com:sporting-innovations/OfflineReverseGeocode.git</connection>
         <developerConnection>scm:git:git@github.com:sporting-innovations/OfflineReverseGeocode.git</developerConnection>
-        <tag>v1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
