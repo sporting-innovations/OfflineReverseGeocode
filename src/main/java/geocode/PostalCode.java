@@ -55,11 +55,9 @@ public class PostalCode extends KDNodeComparator<PostalCode> {
     public int accuracy;
     public double[] point = new double[3]; // The 3D coordinates of the point
 
-    /**
-     * Builds a PostalCode object from an entire row of the postal code file.
-     * @param row A String containing one row of data from the postal code file.
-     */
-    public PostalCode(String row) {
+    public PostalCode() {}
+
+    PostalCode(String row) {
         String[] data = row.split("\t");
         countryCode = data[0];
         postalCode = data[1];
@@ -80,12 +78,7 @@ public class PostalCode extends KDNodeComparator<PostalCode> {
         }
     }
 
-    /**
-     * Builds a PostalCode object from the latitude/longitude.
-     * @param latitude The latitude of the postal code.
-     * @param longitude The longitude of the postal code.
-     */
-    public PostalCode(Double latitude, Double longitude) {
+    PostalCode(Double latitude, Double longitude) {
         this.placeName = "Search";
         this.latitude = latitude;
         this.longitude = longitude;
