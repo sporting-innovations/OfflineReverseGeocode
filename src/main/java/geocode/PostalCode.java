@@ -55,7 +55,7 @@ public class PostalCode extends KDNodeComparator<PostalCode> {
     public int accuracy;
     public double[] point = new double[3]; // The 3D coordinates of the point
 
-    PostalCode(String row) {
+    public PostalCode(String row) {
         String[] data = row.split("\t");
         countryCode = data[0];
         postalCode = data[1];
@@ -76,7 +76,7 @@ public class PostalCode extends KDNodeComparator<PostalCode> {
         }
     }
 
-    PostalCode(Double latitude, Double longitude) {
+    public PostalCode(Double latitude, Double longitude) {
         this.placeName = "Search";
         this.latitude = latitude;
         this.longitude = longitude;
