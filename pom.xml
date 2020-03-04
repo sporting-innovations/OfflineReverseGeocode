@@ -11,7 +11,7 @@
     <groupId>com.fanthreesixty.libraries</groupId>
     <artifactId>OfflineReverseGeocode</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1-FTS-2266-SNAPSHOT</version>
     <name>Offline Reverse Geocoding Java library for geo names and postal codes</name>
     <description>Forked from http://github.com/AReallyGoodName/OfflineReverseGeocode</description>
 
