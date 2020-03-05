@@ -55,6 +55,8 @@ public class PostalCode extends KDNodeComparator<PostalCode> {
     public int accuracy;
     public double[] point = new double[3]; // The 3D coordinates of the point
 
+    public PostalCode() {}
+
     PostalCode(String row) {
         String[] data = row.split("\t");
         countryCode = data[0];
